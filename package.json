@@ -1,7 +1,7 @@
 {
   "productName": "selfcheckout",
   "artifactName": "${productName}.${ext}",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "Caixa Self Checkout CallFarma",
   "iniName": "ADMINH.ini",
   "homepage": "https://callfarma.com.br",
@@ -142,7 +142,7 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "buildVersion": "1.1.0",
+    "buildVersion": "1.1.2",
     "npmRebuild": false,
     "productName": "selfcheckout",
     "artifactName": "${productName}.${ext}",
