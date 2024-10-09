@@ -143,9 +143,6 @@
   },
   "build": {
     "buildVersion": "1.1.2",
-    // "npmRebuild": false,
-    // "productName": "selfcheckout",
-    // "artifactName": "${productName}.${ext}",
     "appId": "br.com.callfarma.caixa",
     "publish": [
       {
