@@ -10,7 +10,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 // import path from 'path';
-import { app, BrowserWindow, shell, ipcMain, screen } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, screen, dialog } from 'electron';
 const { autoUpdater } = require('electron-updater');
 // import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
@@ -3673,5 +3673,17 @@ autoUpdater.on('update-downloaded', () => {
 
   fs.appendFileSync(adminh.Parametros.LOGFILE, `autoUpdater::update-downloaded\n`);
 
-  autoUpdater.quitAndInstall();
+  // Exemplo de notificação após a atualização ser baixada
+  const dialogOpts = {
+    type: 'info',
+    buttons: ['Reiniciar', 'Mais tarde'],
+    title: 'Atualização disponível',
+    message: 'Uma nova versão foi baixada. Reinicie para aplicar as atualizações.',
+  };
+
+  dialog.showMessageBox(dialogOpts).then((returnValue) => {
+    if (returnValue.response === 0) autoUpdater.quitAndInstall();
+  });
+
+  // autoUpdater.quitAndInstall();
 });

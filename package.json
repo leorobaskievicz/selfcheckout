@@ -12,7 +12,7 @@
     "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.prod.ts && cp src/renderer/loading.html release/app/dist/renderer/ && cp assets/loader-caixa.gif release/app/dist/renderer/ && cp assets/logo-callfarma.png release/app/dist/renderer/ && mkdir release/app/dist/renderer/assets && cp ./assets/audio/*.mp3 release/app/dist/renderer/assets/ && cp -r ./assets/cupom release/app/dist/renderer/assets ",
     "postinstall": "ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.ts",
     "lint": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx",
-    "package": "NODE_ENV=production ts-node ./.erb/scripts/clean.js dist && NODE_ENV=production npm run build && NODE_ENV=production electron-builder build --publish never --win",
+    "package": "NODE_ENV=production ts-node ./.erb/scripts/clean.js dist && NODE_ENV=production npm run build && NODE_ENV=production electron-builder build --publish always --win",
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
     "start": "ts-node ./.erb/scripts/check-port-in-use.js && npm run start:renderer",
     "start:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only .",
@@ -149,8 +149,10 @@
     "appId": "br.com.callfarma.caixa",
     "publish": [
       {
-        "provider": "generic",
-        "url": "https://apiv2.callfarma.com.br:8443/selfcheckout/versao"
+        "provider": "github",
+        "owner": "leorobaskievicz",
+        "repo": "selfcheckout",
+        "releaseType": "release"
       }
     ],
     "compression": "maximum",
