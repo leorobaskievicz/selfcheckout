@@ -188,7 +188,6 @@
       "perMachine": true,
       "allowElevation": true,
       "runAfterFinish": true,
-      "silent": true,
       "deleteAppDataOnUninstall": true
     }
   },
