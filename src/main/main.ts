@@ -214,6 +214,7 @@ if (!gotTheLock) {
 app
   .whenReady()
   .then(() => {
+    autoUpdater.setFeedURL('https://apiv2.callfarma.com.br:8443/selfcheckout/versao');
     autoUpdater.checkForUpdatesAndNotify();
 
     ipcMain.on('get-second-screen', async (event, arg) => {
