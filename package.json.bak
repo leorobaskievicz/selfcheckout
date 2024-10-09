@@ -148,7 +148,6 @@
     "productName": "selfcheckout",
     "artifactName": "${productName}.${ext}",
     "appId": "br.com.callfarma.caixa",
-    "asar": true,
     "publish": [
       {
         "provider": "github",
@@ -157,13 +156,16 @@
         "releaseType": "release"
       }
     ],
+    "compression": "maximum",
+    "asar": true,
+    "asarUnpack": "**\\*.{dll}",
     "files": [
-      "dist/**/*",
-      "!node_modules/**/*.md",
-      "!**/*.map",
-      "!**/tests",
-      "!**/docs",
-      "!**/example"
+      "dist",
+      "assets",
+      "package.json",
+      "app.html",
+      "main.prod.js",
+      "main.prod.js.map"
     ],
     "afterSign": ".erb/scripts/notarize.js",
     "win": {
