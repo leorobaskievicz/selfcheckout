@@ -149,6 +149,7 @@
     "artifactName": "${productName}.${ext}",
     "appId": "br.com.callfarma.caixa",
     "asar": true,
+    "compression": "maximum",
     "publish": [
       {
         "provider": "github",
@@ -191,8 +192,10 @@
       "allowElevation": true,
       "runAfterFinish": true,
       "deleteAppDataOnUninstall": true,
-      "compression": "maximum",
-      "differentialPackage": true
+      "useZip": true,
+      "differentialPackage": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
     }
   },
   "devEngines": {
