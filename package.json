@@ -149,9 +149,8 @@
     "appId": "br.com.callfarma.caixa",
     "publish": [
       {
-        "provider": "github",
-        "owner": "leorobaskievicz",
-        "repo": "selfcheckout"
+        "provider": "generic",
+        "url": "https://apiv2.callfarma.com.br:8443/selfcheckout/versao"
       }
     ],
     "compression": "maximum",
