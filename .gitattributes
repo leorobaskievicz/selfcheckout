@@ -1,0 +1,23 @@
+*       text    eol=lf
+*.exe   binary
+*.png   binary
+*.jpg filter=lfs diff=lfs merge=lfs -text
+*.jpeg  binary
+*.ico   binary
+*.icns  binary
+*.eot   binary
+*.otf   binary
+*.ttf   binary
+*.woff  binary
+*.woff2 binary
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.jog filter=lfs diff=lfs merge=lfs -text
+*.mp2 filter=lfs diff=lfs merge=lfs -text
+*.mp3 filter=lfs diff=lfs merge=lfs -text
+*.gif filter=lfs diff=lfs merge=lfs -text
+*.png filter=lfs diff=lfs merge=lfs -text
+*.svg filter=lfs diff=lfs merge=lfs -text
+release/build.zip filter=lfs diff=lfs merge=lfs -text
+*.bmp filter=lfs diff=lfs merge=lfs -text
+release/build/win-ia32-unpacked/resources/app.asar filter=lfs diff=lfs merge=lfs -text
+release/build/win-ia32-unpacked/selfcheckout.exe filter=lfs diff=lfs merge=lfs -text
