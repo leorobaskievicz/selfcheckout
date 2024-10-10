@@ -172,7 +172,7 @@
       "artifactName": "${productName}.${ext}",
       "target": [
         {
-          "target": "portable",
+          "target": "appx",
           "arch": [
             "ia32"
           ]
