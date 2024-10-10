@@ -214,10 +214,20 @@ if (!gotTheLock) {
 app
   .whenReady()
   .then(() => {
-    const feed = `https://apiv2.callfarma.com.br:8443/selfcheckout/versao`;
+    ipcMain.on('verifica-atualizacao', async (event, arg) => {
+      const iniLocation = path.resolve(app.getPath('userData'), require('../../package.json').iniName);
 
-    autoUpdater.setFeedURL({ url: feed });
-    autoUpdater.checkForUpdatesAndNotify();
+      const adminh = ini.parse(fs.readFileSync(iniLocation, 'utf-8'));
+
+      fs.appendFileSync(adminh.Parametros.LOGFILE, `Auto-Updater => Vai verificar se existe nova atualizacao\n`);
+
+      const feed = `https://apiv2.callfarma.com.br:8443/selfcheckout/versao`;
+
+      autoUpdater.setFeedURL({ url: feed });
+      autoUpdater.checkForUpdatesAndNotify();
+
+      event.returnValue = true;
+    });
 
     ipcMain.on('get-second-screen', async (event, arg) => {
       const displays = screen.getAllDisplays();
@@ -285,7 +295,7 @@ app
 
     ipcMain.on('load-produtos', async (event, arg) => {
       const iniLocation = path.resolve(app.getPath('userData'), require('../../package.json').iniName);
-      console.log(iniLocation);
+
       const adminh = ini.parse(fs.readFileSync(iniLocation, 'utf-8'));
 
       fs.appendFileSync(adminh.Parametros.LOGFILE, `Load Produtos Iniciado\n`);

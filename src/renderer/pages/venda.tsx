@@ -162,6 +162,9 @@ class Venda extends React.Component<Props> {
     }
 
     Diversos.putLoadingMsg(`Inicialização concluída com sucesso`);
+
+    await electron.ipcRenderer.sendSync('verifica-atualizacao');
+
     await electron.ipcRenderer.sendSync('loading-close');
   }
 
