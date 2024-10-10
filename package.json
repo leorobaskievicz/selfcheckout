@@ -148,6 +148,7 @@
     "artifactName": "${productName}.${ext}",
     "appId": "br.com.callfarma.caixa",
     "asar": true,
+    "asarUnpack": "**\\*.{dll}",
     "npmRebuild": false,
     "compression": "maximum",
     "publish": [
@@ -188,12 +189,8 @@
       "./assets/**"
     ],
     "nsis": {
-      "oneClick": true,
-      "perMachine": true,
-      "allowElevation": true,
-      "runAfterFinish": true,
-      "deleteAppDataOnUninstall": true,
-      "differentialPackage": true
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false
     }
   },
   "devEngines": {
