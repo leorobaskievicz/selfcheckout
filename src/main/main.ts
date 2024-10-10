@@ -239,36 +239,45 @@ app
         });
 
         autoUpdater.on('checking-for-update', () => {
-          fs.appendFileSync(msgLoadLocation, `Verificando última atualização\n`);
+          fs.writeFileSync(msgLoadLocation, `Verificando última atualização\n`);
           fs.appendFileSync(adminh.Parametros.LOGFILE, `autoUpdater::checking-for-update\n`);
         });
 
         autoUpdater.on('update-available', (info) => {
-          fs.appendFileSync(msgLoadLocation, `Nova atualização disponível\n`);
+          fs.writeFileSync(msgLoadLocation, `Nova atualização disponível\n`);
           fs.appendFileSync(adminh.Parametros.LOGFILE, `autoUpdater::update-available => ${JSON.stringify(info)}\n`);
         });
 
         autoUpdater.on('update-not-available', (info) => {
-          fs.appendFileSync(msgLoadLocation, `Nenhum atualização disponível\n`);
+          fs.writeFileSync(msgLoadLocation, `Nenhum atualização disponível\n`);
           fs.appendFileSync(adminh.Parametros.LOGFILE, `autoUpdater::update-no-available => ${JSON.stringify(info)}\n`);
           resolve('Nenhum atualização disponível');
         });
 
         autoUpdater.on('download-progress', (progress) => {
-          fs.appendFileSync(msgLoadLocation, `Baixando atualização... ${progress.percent}%\n`);
+          fs.writeFileSync(msgLoadLocation, `Baixando atualização... ${Math.floor(progress.percent)}%\n`);
           fs.appendFileSync(adminh.Parametros.LOGFILE, `autoUpdater::download-progress -> ${progress.percent}%\n`);
         });
 
         autoUpdater.on('update-downloaded', () => {
           fs.appendFileSync(adminh.Parametros.LOGFILE, `autoUpdater::update-downloaded\n`);
-          fs.appendFileSync(msgLoadLocation, `Última atualização baixada com sucesso.\n`);
+          fs.writeFileSync(msgLoadLocation, `Última atualização baixada com sucesso.\n`);
           resolve('Download da atualização feito com sucesso');
         });
       });
     });
 
     ipcMain.on('verifica-atualizacao-restart', async (event, arg) => {
-      autoUpdater.quitAndInstall();
+      // Fecha todas as janelas, exceto a janela principal
+      BrowserWindow.getAllWindows().forEach((window) => {
+        if (window !== mainWindow) {
+          window.close();
+        }
+      });
+
+      setTimeout(() => {
+        autoUpdater.quitAndInstall(false, true);
+      }, 1000);
     });
 
     ipcMain.on('get-second-screen', async (event, arg) => {

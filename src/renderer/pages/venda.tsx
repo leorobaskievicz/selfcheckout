@@ -91,93 +91,97 @@ class Venda extends React.Component<Props> {
     Diversos.putLog(`- Iniciando Aplicação !!!`);
     Diversos.putLoadingMsg(`- Iniciando Aplicação !!!`);
 
-    this.db = await Diversos.getDb();
-
-    window.addEventListener('online', this.updateOnlineStatus.bind(this));
-    window.addEventListener('offline', this.updateOnlineStatus.bind(this));
-
-    this.updateOnlineStatus();
-
-    this.props.clean();
-
-    this.props.setParam({
-      ...this.props.param,
-      leitor: '',
-      step: 1,
-      vendedor: 1,
-      cpf: '',
-      celular: '',
-      nome: '',
-      formapg: 0,
-      cpfNaNota: true,
-      cpfClube: true,
-      prevenda: '',
-      loja: null,
-    });
-
-    if (this.props.param.step > 1) {
-      this.props.setParam({ ...this.props.param, step: 1 });
-    }
-
-    if (this.adminh.Trier && this.adminh.Trier.URL && this.adminh.Trier.Token) {
-      /*
-        INTEGRAÇAO COM TRIER SISTEMAS
-        ==================================
-      */
-      Diversos.putLoadingMsg(`Atualizando produtos da Trier`);
-
-      await this.loadProdutosLocal(false);
-    } else {
-      /*
-        INTEGRAÇAO COM TECWORKS SISTEMAS
-        ==================================
-      */
-
-      if (String(this.adminh.Parametros.FGDEV).toLowerCase() !== 'sim') {
-        Diversos.putLoadingMsg(`Ativando TEF`);
-
-        const executablePath = path.resolve(this.adminh.Parametros.TEF, 'SERVERTEF.exe');
-
-        child(executablePath, (err, data) => {
-          if (err) {
-            console.error(err);
-          }
-        });
-
-        Diversos.putLoadingMsg(`Ativando processador de vendas`);
-        const executablePathServerest = path.resolve(this.adminh.Parametros.TEF, 'SERVEREST.exe');
-
-        child(executablePathServerest, (err, data) => {
-          if (err) {
-            console.error(err);
-          }
-        });
-      }
-
-      Diversos.putLoadingMsg(`Carregando dados da loja`);
-      await this.getLoja();
-
-      Diversos.putLoadingMsg(`Atualizando produtos`);
-      await this.loadProdutosLocal(true);
-    }
-
     Diversos.putLoadingMsg(`Verificando novas atualizações do programa.`);
+
+    let fgAtualizando = false;
 
     try {
       const resultAtualizador = await electron.ipcRenderer.sendSync('verifica-atualizacao');
 
       if (resultAtualizador === 'Download da atualização feito com sucesso') {
-        swal('Nova atualização disponível.', '', 'info').then(() => {
-          electron.ipcRenderer.sendSync('verifica-atualizacao-restart', {});
-        });
+        fgAtualizando = true;
+        swal('Nova versão disponível.', 'O programa irá se auto atualizar, um momento...', 'info');
+        electron.ipcRenderer.sendSync('verifica-atualizacao-restart', {});
       }
     } catch (e) {
       Diversos.putLoadingMsg(`Falha ao verificação atualização (auto-updater) => ${JSON.stringify(e.message)}`);
     }
 
-    Diversos.putLoadingMsg(`Inicialização concluída com sucesso`);
+    if (!fgAtualizando) {
+      this.db = await Diversos.getDb();
 
-    await electron.ipcRenderer.sendSync('loading-close');
+      window.addEventListener('online', this.updateOnlineStatus.bind(this));
+      window.addEventListener('offline', this.updateOnlineStatus.bind(this));
+
+      this.updateOnlineStatus();
+
+      this.props.clean();
+
+      this.props.setParam({
+        ...this.props.param,
+        leitor: '',
+        step: 1,
+        vendedor: 1,
+        cpf: '',
+        celular: '',
+        nome: '',
+        formapg: 0,
+        cpfNaNota: true,
+        cpfClube: true,
+        prevenda: '',
+        loja: null,
+      });
+
+      if (this.props.param.step > 1) {
+        this.props.setParam({ ...this.props.param, step: 1 });
+      }
+
+      if (this.adminh.Trier && this.adminh.Trier.URL && this.adminh.Trier.Token) {
+        /*
+          INTEGRAÇAO COM TRIER SISTEMAS
+          ==================================
+        */
+        Diversos.putLoadingMsg(`Atualizando produtos da Trier`);
+
+        await this.loadProdutosLocal(false);
+      } else {
+        /*
+          INTEGRAÇAO COM TECWORKS SISTEMAS
+          ==================================
+        */
+
+        if (String(this.adminh.Parametros.FGDEV).toLowerCase() !== 'sim') {
+          Diversos.putLoadingMsg(`Ativando TEF`);
+
+          const executablePath = path.resolve(this.adminh.Parametros.TEF, 'SERVERTEF.exe');
+
+          child(executablePath, (err, data) => {
+            if (err) {
+              console.error(err);
+            }
+          });
+
+          Diversos.putLoadingMsg(`Ativando processador de vendas`);
+          const executablePathServerest = path.resolve(this.adminh.Parametros.TEF, 'SERVEREST.exe');
+
+          child(executablePathServerest, (err, data) => {
+            if (err) {
+              console.error(err);
+            }
+          });
+        }
+
+        Diversos.putLoadingMsg(`Carregando dados da loja`);
+        await this.getLoja();
+
+        Diversos.putLoadingMsg(`Atualizando produtos`);
+        await this.loadProdutosLocal(true);
+      }
+
+      Diversos.putLoadingMsg(`Inicialização concluída com sucesso`);
+
+      await electron.ipcRenderer.sendSync('loading-close');
+    }
   }
 
   async componentWillUnmount(): void {
