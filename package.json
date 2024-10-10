@@ -172,7 +172,7 @@
       "artifactName": "${productName}.${ext}",
       "target": [
         {
-          "target": "portable",
+          "target": "nsis",
           "arch": [
             "ia32"
           ]
@@ -189,7 +189,7 @@
     ],
     "nsis": {
       "oneClick": true,
-      "perMachine": true,
+      "perMachine": false,
       "allowElevation": true,
       "runAfterFinish": true,
       "deleteAppDataOnUninstall": true,
