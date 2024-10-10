@@ -80,7 +80,7 @@ const createWindow = async () => {
     show: false,
     width: 1440,
     height: 900,
-    icon: getAssetPath('icon.png'),
+    icon: getAssetPath('pilot-self.png'),
     frame: isDebug ? true : false,
     kiosk: isDebug ? false : true,
     fullscreen: true,
@@ -154,7 +154,7 @@ const createSecondWindow = async () => {
       fullscreen: true,
       autoHideMenuBar: true,
 
-      icon: getAssetPath('icon.png'),
+      icon: getAssetPath('pilot-self.png'),
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: false,
