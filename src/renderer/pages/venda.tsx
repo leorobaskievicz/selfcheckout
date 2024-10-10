@@ -163,7 +163,17 @@ class Venda extends React.Component<Props> {
 
     Diversos.putLoadingMsg(`Verificando novas atualizações do programa.`);
 
-    await electron.ipcRenderer.sendSync('verifica-atualizacao');
+    try {
+      const resultAtualizador = await electron.ipcRenderer.sendSync('verifica-atualizacao');
+
+      if (resultAtualizador === 'Download da atualização feito com sucesso') {
+        swal('Nova atualização disponível.', '', 'info').then(() => {
+          electron.ipcRenderer.sendSync('verifica-atualizacao-restart', {});
+        });
+      }
+    } catch (e) {
+      Diversos.putLoadingMsg(`Falha ao verificação atualização (auto-updater) => ${JSON.stringify(e.message)}`);
+    }
 
     Diversos.putLoadingMsg(`Inicialização concluída com sucesso`);
 

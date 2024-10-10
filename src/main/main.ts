@@ -216,14 +216,11 @@ app
   .then(() => {
     ipcMain.on('verifica-atualizacao', async (event, arg) => {
       const iniLocation = path.resolve(app.getPath('userData'), require('../../package.json').iniName);
+      const msgLoadLocation = path.resolve(app.getPath('userData'), 'loading_msg.txt');
 
       const adminh = ini.parse(fs.readFileSync(iniLocation, 'utf-8'));
 
       fs.appendFileSync(adminh.Parametros.LOGFILE, `Auto-Updater => Vai verificar se existe nova atualizacao\n`);
-
-      // const feed = `https://apiv2.callfarma.com.br:8443/selfcheckout/versao`;
-
-      // autoUpdater.setFeedURL({ url: feed });
 
       fs.appendFileSync(adminh.Parametros.LOGFILE, `Auto-Updater => Ativando log detalhado\n`);
 
@@ -231,11 +228,47 @@ app
 
       autoUpdater.logger.transports.file.level = 'debug';
 
-      autoUpdater.checkForUpdatesAndNotify();
+      event.returnValue = await new Promise((resolve, reject) => {
+        autoUpdater.checkForUpdatesAndNotify();
 
-      fs.appendFileSync(adminh.Parametros.LOGFILE, `Auto-Updater => Chamou checkForUpdatesAndNotify\n`);
+        fs.appendFileSync(adminh.Parametros.LOGFILE, `Auto-Updater => Chamou checkForUpdatesAndNotify\n`);
 
-      event.returnValue = true;
+        autoUpdater.on('error', (err) => {
+          fs.appendFileSync(adminh.Parametros.LOGFILE, `autoUpdater::error => ${JSON.stringify(err)}\n`);
+          reject('Erro ao verificar atualização');
+        });
+
+        autoUpdater.on('checking-for-update', () => {
+          fs.appendFileSync(msgLoadLocation, `Verificando última atualização\n`);
+          fs.appendFileSync(adminh.Parametros.LOGFILE, `autoUpdater::checking-for-update\n`);
+        });
+
+        autoUpdater.on('update-available', (info) => {
+          fs.appendFileSync(msgLoadLocation, `Nova atualização disponível\n`);
+          fs.appendFileSync(adminh.Parametros.LOGFILE, `autoUpdater::update-available => ${JSON.stringify(info)}\n`);
+        });
+
+        autoUpdater.on('update-not-available', (info) => {
+          fs.appendFileSync(msgLoadLocation, `Nenhum atualização disponível\n`);
+          fs.appendFileSync(adminh.Parametros.LOGFILE, `autoUpdater::update-no-available => ${JSON.stringify(info)}\n`);
+          resolve('Nenhum atualização disponível');
+        });
+
+        autoUpdater.on('download-progress', (progress) => {
+          fs.appendFileSync(msgLoadLocation, `Baixando atualização... ${progress.percent}%\n`);
+          fs.appendFileSync(adminh.Parametros.LOGFILE, `autoUpdater::download-progress -> ${progress.percent}%\n`);
+        });
+
+        autoUpdater.on('update-downloaded', () => {
+          fs.appendFileSync(adminh.Parametros.LOGFILE, `autoUpdater::update-downloaded\n`);
+          fs.appendFileSync(msgLoadLocation, `Última atualização baixada com sucesso.\n`);
+          resolve('Download da atualização feito com sucesso');
+        });
+      });
+    });
+
+    ipcMain.on('verifica-atualizacao-restart', async (event, arg) => {
+      autoUpdater.quitAndInstall();
     });
 
     ipcMain.on('get-second-screen', async (event, arg) => {
@@ -3646,54 +3679,3 @@ app
     });
   })
   .catch(console.log);
-
-autoUpdater.on('error', (err) => {
-  const iniLocation = path.resolve(app.getPath('userData'), require('../../package.json').iniName);
-
-  const adminh = ini.parse(fs.readFileSync(iniLocation, 'utf-8'));
-
-  fs.appendFileSync(adminh.Parametros.LOGFILE, `autoUpdater::error => ${JSON.stringify(err)}\n`);
-});
-
-autoUpdater.on('checking-for-update', () => {
-  const iniLocation = path.resolve(app.getPath('userData'), require('../../package.json').iniName);
-
-  const adminh = ini.parse(fs.readFileSync(iniLocation, 'utf-8'));
-
-  fs.appendFileSync(adminh.Parametros.LOGFILE, `autoUpdater::checking-for-update\n`);
-});
-
-autoUpdater.on('update-available', (info) => {
-  const iniLocation = path.resolve(app.getPath('userData'), require('../../package.json').iniName);
-
-  const adminh = ini.parse(fs.readFileSync(iniLocation, 'utf-8'));
-
-  fs.appendFileSync(adminh.Parametros.LOGFILE, `autoUpdater::update-available\n`);
-});
-
-autoUpdater.on('update-not-available', (info) => {
-  const iniLocation = path.resolve(app.getPath('userData'), require('../../package.json').iniName);
-
-  const adminh = ini.parse(fs.readFileSync(iniLocation, 'utf-8'));
-
-  fs.appendFileSync(adminh.Parametros.LOGFILE, `autoUpdater::update-no-available\n`);
-});
-
-autoUpdater.on('download-progress', (progress) => {
-  const iniLocation = path.resolve(app.getPath('userData'), require('../../package.json').iniName);
-
-  const adminh = ini.parse(fs.readFileSync(iniLocation, 'utf-8'));
-
-  fs.appendFileSync(adminh.Parametros.LOGFILE, `autoUpdater::download-progress -> ${progress.percent}%\n`);
-});
-
-autoUpdater.on('update-downloaded', () => {
-  const iniLocation = path.resolve(app.getPath('userData'), require('../../package.json').iniName);
-
-  const adminh = ini.parse(fs.readFileSync(iniLocation, 'utf-8'));
-
-  fs.appendFileSync(adminh.Parametros.LOGFILE, `autoUpdater::update-downloaded\n`);
-
-  // Exemplo de notificação após a atualização ser baixada
-  autoUpdater.quitAndInstall();
-});
