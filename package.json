@@ -152,6 +152,7 @@
     "asarUnpack": "**\\*.{dll}",
     "files": [
       "dist",
+      "node_modules",
       "assets",
       "package.json",
       "app.html",
@@ -163,24 +164,26 @@
       "artifactName": "${productName}.${ext}",
       "target": [
         {
-          "target": "nsis",
-          "arch": [
-            "ia32"
-          ]
+          "target": "nsis"
         }
       ]
     },
     "directories": {
-      "app": "release/app",
-      "buildResources": "assets",
-      "output": "release/build"
+      "buildResources": "build"
     },
-    "extraResources": [
-      "./assets/**"
-    ],
     "nsis": {
-      "allowToChangeInstallationDirectory": true,
-      "oneClick": false
+      "oneClick": true,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": false,
+      "deleteAppDataOnUninstall": true,
+      "artifactName": "${productName}-Setup-${version}.exe",
+      "compression": "maximum",
+      "installerIcon": "build/installerIcon.ico",
+      "uninstallerIcon": "build/uninstallerIcon.ico",
+      "uninstallDisplayName": "${productName}",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "${productName}"
     }
   },
   "devEngines": {
