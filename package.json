@@ -154,7 +154,8 @@
         "provider": "github",
         "owner": "leorobaskievicz",
         "repo": "selfcheckout",
-        "releaseType": "release"
+        "releaseType": "release",
+        "private": true
       }
     ],
     "files": [
