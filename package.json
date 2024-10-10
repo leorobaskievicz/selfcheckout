@@ -193,9 +193,7 @@
       "allowElevation": false,
       "runAfterFinish": true,
       "deleteAppDataOnUninstall": true,
-      "differentialPackage": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true
+      "differentialPackage": false
     }
   },
   "devEngines": {
