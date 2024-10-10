@@ -148,6 +148,7 @@
     "artifactName": "${productName}.${ext}",
     "appId": "br.com.callfarma.caixa",
     "asar": true,
+    "npmRebuild": false,
     "compression": "maximum",
     "publish": [
       {
@@ -171,7 +172,7 @@
       "artifactName": "${productName}.${ext}",
       "target": [
         {
-          "target": "nsis",
+          "target": "portable",
           "arch": [
             "ia32"
           ]

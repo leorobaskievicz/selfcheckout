@@ -987,7 +987,7 @@ export const Diversos = {
     if (typeof adminh.Parametros.FGFEIRA === 'undefined' || !adminh.Parametros.FGFEIRA) {
       fs.writeFileSync(
         iniLocation,
-        ini.stringify({ ...adminh.Parametros, FGFEIRA: __dirname }, { section: 'Parametros' }) +
+        ini.stringify({ ...adminh.Parametros, FGFEIRA: 'Não' }, { section: 'Parametros' }) +
           ini.stringify({ ...adminh.TrnCentre, Sequencia: 0 }, { section: 'TrnCentre' }) +
           ini.stringify({ ...adminh.Trier }, { section: 'Trier' })
       );
