@@ -1,11 +1,13 @@
 {
+  "name": "selfcheckout",
   "productName": "selfcheckout",
   "artifactName": "${productName}.${ext}",
   "version": "1.1.8",
   "description": "Caixa Self Checkout CallFarma",
   "iniName": "ADMINH.ini",
+  "author": "Pilot Self",
   "homepage": "https://callfarma.com.br",
-  "main": "./src/main/main.js",
+  "main": "./src/main/main.ts",
   "scripts": {
     "build": "node pre-build.js && concurrently \"npm run build:main\" \"npm run build:renderer\"",
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts",
@@ -36,12 +38,12 @@
     ]
   },
   "dependencies": {
-    "@electron/remote": "^2.0.10",
     "electron-log": "^4.4.8",
-    "electron-updater": "^5.3.0",
-    "react-qr-code": "^2.0.15"
+    "electron-updater": "^5.3.0"
   },
   "devDependencies": {
+    "react-qr-code": "^2.0.15",
+    "@electron/remote": "^2.0.10",
     "@electron/notarize": "^1.2.3",
     "@electron/rebuild": "^3.2.13",
     "@emotion/react": "^11.11.1",
@@ -169,17 +171,20 @@
       ]
     },
     "directories": {
-      "buildResources": "build"
+      "app": "release/app",
+      "buildResources": "assets",
+      "output": "release/build"
     },
+    "extraResources": [
+      "./assets/**"
+    ],
     "nsis": {
+      "runAfterFinish": true,
       "oneClick": true,
       "perMachine": false,
       "allowToChangeInstallationDirectory": false,
       "deleteAppDataOnUninstall": true,
       "artifactName": "${productName}-Setup-${version}.exe",
-      "compression": "maximum",
-      "installerIcon": "build/installerIcon.ico",
-      "uninstallerIcon": "build/uninstallerIcon.ico",
       "uninstallDisplayName": "${productName}",
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
