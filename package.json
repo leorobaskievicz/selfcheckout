@@ -1,7 +1,7 @@
 {
   "productName": "selfcheckout",
   "artifactName": "${productName}.${ext}",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "Caixa Self Checkout CallFarma",
   "iniName": "ADMINH.ini",
   "homepage": "https://callfarma.com.br",
@@ -13,7 +13,6 @@
     "postinstall": "ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.ts",
     "lint": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx",
     "package": "NODE_ENV=production ts-node ./.erb/scripts/clean.js dist && NODE_ENV=production npm run build && NODE_ENV=production electron-builder build --publish never --win",
-    "packagePublish": "NODE_ENV=production ts-node ./.erb/scripts/clean.js dist && NODE_ENV=production npm run build && NODE_ENV=production electron-builder build --publish always --win",
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
     "start": "ts-node ./.erb/scripts/check-port-in-use.js && npm run start:renderer",
     "start:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only .",
@@ -143,30 +142,21 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "buildVersion": "1.1.7",
+    "buildVersion": "1.1.8",
+    "npmRebuild": false,
     "productName": "selfcheckout",
     "artifactName": "${productName}.${ext}",
     "appId": "br.com.callfarma.caixa",
+    "compression": "maximum",
     "asar": true,
     "asarUnpack": "**\\*.{dll}",
-    "npmRebuild": true,
-    "compression": "maximum",
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "leorobaskievicz",
-        "repo": "selfcheckout",
-        "releaseType": "release",
-        "private": true
-      }
-    ],
     "files": [
-      "dist/**/*",
-      "!node_modules/**/*.md",
-      "!**/*.map",
-      "!**/tests",
-      "!**/docs",
-      "!**/example"
+      "dist",
+      "assets",
+      "package.json",
+      "app.html",
+      "main.prod.js",
+      "main.prod.js.map"
     ],
     "afterSign": ".erb/scripts/notarize.js",
     "win": {
