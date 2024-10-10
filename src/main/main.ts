@@ -225,7 +225,11 @@ app
 
       // autoUpdater.setFeedURL({ url: feed });
 
-      // fs.appendFileSync(adminh.Parametros.LOGFILE, `Auto-Updater => Ajustando URL do proxy\n`);
+      fs.appendFileSync(adminh.Parametros.LOGFILE, `Auto-Updater => Ativando log detalhado\n`);
+
+      autoUpdater.logger = require('electron-log');
+
+      autoUpdater.logger.transports.file.level = 'debug';
 
       autoUpdater.checkForUpdatesAndNotify();
 

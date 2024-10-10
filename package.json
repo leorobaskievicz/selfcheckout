@@ -15,6 +15,7 @@
     "postinstall": "ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.ts",
     "lint": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx",
     "package": "NODE_ENV=production ts-node ./.erb/scripts/clean.js dist && NODE_ENV=production npm run build && NODE_ENV=production electron-builder build --publish never --win",
+    "packagePublish": "NODE_ENV=production ts-node ./.erb/scripts/clean.js dist && NODE_ENV=production npm run build && NODE_ENV=production electron-builder build --publish always --win",
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
     "start": "ts-node ./.erb/scripts/check-port-in-use.js && npm run start:renderer",
     "start:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only .",
@@ -182,7 +183,8 @@
       "provider": "github",
       "owner": "leorobaskievicz",
       "repo": "selfcheckout",
-      "private": false
+      "private": false,
+      "releaseType": "release"
     },
     "nsis": {
       "runAfterFinish": true,
