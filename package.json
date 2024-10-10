@@ -149,7 +149,7 @@
     "appId": "br.com.callfarma.caixa",
     "asar": true,
     "asarUnpack": "**\\*.{dll}",
-    "npmRebuild": false,
+    "npmRebuild": true,
     "compression": "maximum",
     "publish": [
       {
