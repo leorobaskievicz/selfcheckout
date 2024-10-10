@@ -221,11 +221,11 @@ app
 
       fs.appendFileSync(adminh.Parametros.LOGFILE, `Auto-Updater => Vai verificar se existe nova atualizacao\n`);
 
-      const feed = `https://apiv2.callfarma.com.br:8443/selfcheckout/versao`;
+      // const feed = `https://apiv2.callfarma.com.br:8443/selfcheckout/versao`;
 
-      autoUpdater.setFeedURL({ url: feed });
+      // autoUpdater.setFeedURL({ url: feed });
 
-      fs.appendFileSync(adminh.Parametros.LOGFILE, `Auto-Updater => Ajustando URL do proxy\n`);
+      // fs.appendFileSync(adminh.Parametros.LOGFILE, `Auto-Updater => Ajustando URL do proxy\n`);
 
       autoUpdater.checkForUpdatesAndNotify();
 
