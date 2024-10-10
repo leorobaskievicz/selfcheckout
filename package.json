@@ -178,6 +178,12 @@
     "extraResources": [
       "./assets/**"
     ],
+    "publish": {
+      "provider": "github",
+      "owner": "leorobaskievicz",
+      "repo": "selfcheckout",
+      "private": true
+    },
     "nsis": {
       "runAfterFinish": true,
       "oneClick": true,
