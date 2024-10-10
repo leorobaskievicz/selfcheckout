@@ -2,7 +2,7 @@
   "name": "selfcheckout",
   "productName": "selfcheckout",
   "artifactName": "${productName}.${ext}",
-  "version": "1.1.9",
+  "version": "1.1.10",
   "description": "Caixa Self Checkout CallFarma",
   "iniName": "ADMINH.ini",
   "author": "Pilot Self",
@@ -145,7 +145,7 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "buildVersion": "1.1.9",
+    "buildVersion": "1.1.10",
     "npmRebuild": false,
     "productName": "selfcheckout",
     "artifactName": "${productName}.${ext}",
