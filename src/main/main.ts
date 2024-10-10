@@ -214,9 +214,8 @@ if (!gotTheLock) {
 app
   .whenReady()
   .then(() => {
-    const server = 'https://github.com';
-    const feed = `${server}/selfcheckout/releases/tag/v${app.getVersion()}`;
-    autoUpdater.autoDownload = false; // Desabilita o auto-download
+    const feed = `https://apiv2.callfarma.com.br:8443/selfcheckout/versao`;
+
     autoUpdater.setFeedURL({ url: feed });
     autoUpdater.checkForUpdatesAndNotify();
 

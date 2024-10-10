@@ -144,7 +144,6 @@
   },
   "build": {
     "buildVersion": "1.1.6",
-    "npmRebuild": false,
     "productName": "selfcheckout",
     "artifactName": "${productName}.${ext}",
     "appId": "br.com.callfarma.caixa",
@@ -152,10 +151,7 @@
     "compression": "maximum",
     "publish": [
       {
-        "provider": "github",
-        "owner": "leorobaskievicz",
-        "repo": "selfcheckout",
-        "releaseType": "release"
+        "provider": "github"
       }
     ],
     "files": [
@@ -171,7 +167,7 @@
       "artifactName": "${productName}.${ext}",
       "target": [
         {
-          "target": "portable",
+          "target": "nsis",
           "arch": [
             "ia32"
           ]
