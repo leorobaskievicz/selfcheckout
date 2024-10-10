@@ -151,7 +151,10 @@
     "compression": "maximum",
     "publish": [
       {
-        "provider": "github"
+        "provider": "github",
+        "owner": "leorobaskievicz",
+        "repo": "selfcheckout",
+        "releaseType": "release"
       }
     ],
     "files": [
