@@ -1,11 +1,13 @@
 {
+  "name": "selfcheckout",
   "productName": "selfcheckout",
   "artifactName": "${productName}.${ext}",
-  "version": "1.1.0",
+  "version": "1.1.14",
   "description": "Caixa Self Checkout CallFarma",
   "iniName": "ADMINH.ini",
+  "author": "Pilot Self",
   "homepage": "https://callfarma.com.br",
-  "main": "./src/main/main.js",
+  "main": "./src/main/main.ts",
   "scripts": {
     "build": "node pre-build.js && concurrently \"npm run build:main\" \"npm run build:renderer\"",
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts",
@@ -13,6 +15,7 @@
     "postinstall": "ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.ts",
     "lint": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx",
     "package": "NODE_ENV=production ts-node ./.erb/scripts/clean.js dist && NODE_ENV=production npm run build && NODE_ENV=production electron-builder build --publish never --win",
+    "packagePublish": "NODE_ENV=production ts-node ./.erb/scripts/clean.js dist && NODE_ENV=production npm run build && NODE_ENV=production electron-builder build --publish always --win",
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
     "start": "ts-node ./.erb/scripts/check-port-in-use.js && npm run start:renderer",
     "start:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only .",
@@ -36,12 +39,12 @@
     ]
   },
   "dependencies": {
-    "@electron/remote": "^2.0.10",
     "electron-log": "^4.4.8",
-    "electron-updater": "^5.3.0",
-    "react-qr-code": "^2.0.15"
+    "electron-updater": "^5.3.0"
   },
   "devDependencies": {
+    "react-qr-code": "^2.0.15",
+    "@electron/remote": "^2.0.10",
     "@electron/notarize": "^1.2.3",
     "@electron/rebuild": "^3.2.13",
     "@emotion/react": "^11.11.1",
@@ -79,7 +82,7 @@
     "css-minimizer-webpack-plugin": "^5.0.0",
     "detect-port": "^1.5.1",
     "electron": "^32.1.2",
-    "electron-builder": "^24.13.3",
+    "electron-builder": "^24",
     "electron-debug": "^3.2.0",
     "electron-devtools-installer": "^3.2.0",
     "electron-installer-windows": "^3.0.0",
@@ -142,22 +145,17 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "buildVersion": "1.1.0",
+    "buildVersion": "1.1.14",
     "npmRebuild": false,
     "productName": "selfcheckout",
     "artifactName": "${productName}.${ext}",
     "appId": "br.com.callfarma.caixa",
-    "publish": [
-      {
-        "provider": "generic",
-        "url": "https://apiv2.callfarma.com.br:8443/selfcheckout/versao"
-      }
-    ],
     "compression": "maximum",
     "asar": true,
     "asarUnpack": "**\\*.{dll}",
     "files": [
       "dist",
+      "node_modules",
       "assets",
       "package.json",
       "app.html",
@@ -169,10 +167,7 @@
       "artifactName": "${productName}.${ext}",
       "target": [
         {
-          "target": "nsis",
-          "arch": [
-            "ia32"
-          ]
+          "target": "nsis"
         }
       ]
     },
@@ -184,9 +179,24 @@
     "extraResources": [
       "./assets/**"
     ],
+    "publish": {
+      "provider": "github",
+      "owner": "leorobaskievicz",
+      "repo": "selfcheckout",
+      "private": false,
+      "releaseType": "release"
+    },
     "nsis": {
-      "allowToChangeInstallationDirectory": true,
-      "oneClick": false
+      "runAfterFinish": true,
+      "oneClick": true,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": false,
+      "deleteAppDataOnUninstall": true,
+      "artifactName": "${productName}-Setup-${version}.exe",
+      "uninstallDisplayName": "${productName}",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "${productName}"
     }
   },
   "devEngines": {

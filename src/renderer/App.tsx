@@ -46,26 +46,9 @@ export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        {/* <Dialog fullScreen={Boolean('true')} open={Boolean('true')}>
-          <DialogTitle style={{ padding: 0 }}>
-            <AppBar mainApp={this} />
-          </DialogTitle> */}
-
-        {/* <DialogContent
-            className="mainContent"
-            style={{
-              padding: 0,
-              overflow: 'hidden',
-              width: '100%',
-              height: '100%',
-              boxSizing: 'border-box',
-            }}
-          > */}
         <Router>
           <Route path="/" component={App.View} />
         </Router>
-        {/* </DialogContent> */}
-        {/* </Dialog> */}
       </Provider>
     );
   }
