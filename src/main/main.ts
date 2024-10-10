@@ -224,7 +224,12 @@ app
       const feed = `https://apiv2.callfarma.com.br:8443/selfcheckout/versao`;
 
       autoUpdater.setFeedURL({ url: feed });
+
+      fs.appendFileSync(adminh.Parametros.LOGFILE, `Auto-Updater => Ajustando URL do proxy\n`);
+
       autoUpdater.checkForUpdatesAndNotify();
+
+      fs.appendFileSync(adminh.Parametros.LOGFILE, `Auto-Updater => Chamou checkForUpdatesAndNotify\n`);
 
       event.returnValue = true;
     });
@@ -3686,16 +3691,5 @@ autoUpdater.on('update-downloaded', () => {
   fs.appendFileSync(adminh.Parametros.LOGFILE, `autoUpdater::update-downloaded\n`);
 
   // Exemplo de notificação após a atualização ser baixada
-  const dialogOpts = {
-    type: 'info',
-    buttons: ['Reiniciar', 'Mais tarde'],
-    title: 'Atualização disponível',
-    message: 'Uma nova versão foi baixada. Reinicie para aplicar as atualizações.',
-  };
-
-  dialog.showMessageBox(dialogOpts).then((returnValue) => {
-    if (returnValue.response === 0) autoUpdater.quitAndInstall();
-  });
-
-  // autoUpdater.quitAndInstall();
+  autoUpdater.quitAndInstall();
 });

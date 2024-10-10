@@ -161,9 +161,11 @@ class Venda extends React.Component<Props> {
       await this.loadProdutosLocal(true);
     }
 
-    Diversos.putLoadingMsg(`Inicialização concluída com sucesso`);
+    Diversos.putLoadingMsg(`Verificando novas atualizações do programa.`);
 
     await electron.ipcRenderer.sendSync('verifica-atualizacao');
+
+    Diversos.putLoadingMsg(`Inicialização concluída com sucesso`);
 
     await electron.ipcRenderer.sendSync('loading-close');
   }
