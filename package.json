@@ -172,7 +172,7 @@
       "artifactName": "${productName}.${ext}",
       "target": [
         {
-          "target": "nsis",
+          "target": "portable",
           "arch": [
             "ia32"
           ]
