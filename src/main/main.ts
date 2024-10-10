@@ -214,10 +214,10 @@ if (!gotTheLock) {
 app
   .whenReady()
   .then(() => {
-    const feed = `https://apiv2.callfarma.com.br:8443/selfcheckout/versao`;
+    // const feed = `https://apiv2.callfarma.com.br:8443/selfcheckout/versao`;
 
-    autoUpdater.setFeedURL({ url: feed });
-    autoUpdater.checkForUpdatesAndNotify();
+    // autoUpdater.setFeedURL({ url: feed });
+    // autoUpdater.checkForUpdatesAndNotify();
 
     ipcMain.on('get-second-screen', async (event, arg) => {
       const displays = screen.getAllDisplays();

@@ -189,7 +189,7 @@
     ],
     "nsis": {
       "oneClick": true,
-      "perMachine": false,
+      "perMachine": true,
       "allowElevation": true,
       "runAfterFinish": true,
       "deleteAppDataOnUninstall": true,
