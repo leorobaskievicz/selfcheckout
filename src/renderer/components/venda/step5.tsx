@@ -193,7 +193,7 @@ class Step5 extends React.Component<Props> {
         ) {
           try {
             // BUSCA LINK DA ULTIMA NFCE
-            const linkNfce = await this.handleGetLinkUltNfce();
+            let linkNfce = await this.handleGetLinkUltNfce();
 
             if (!linkNfce) {
               Diversos.putLog('Não foi possível recuperar Link da NFCe emitida');
@@ -208,7 +208,7 @@ class Step5 extends React.Component<Props> {
                   convenio: this.props.param.appConvenioCodigo,
                   link: linkNfce,
                   cdfil: this.props.adminh.Parametros.CDFIL,
-                  nrnfce: this.props.adminh.Parametros.ULTNFCE,
+                  nrnfce: Number(this.props.adminh.Parametros.ULTNFCE) + 1,
                   serienfce: this.props.adminh.Parametros.CDCAIXA,
                 };
 
@@ -221,11 +221,31 @@ class Step5 extends React.Component<Props> {
                 // Diversos.putLog(
                 //   `Retorno Compra Rápida: ${JSON.stringify(resultCompraRapida.status)} | ${JSON.stringify(resultCompraRapida.data)}`
                 // );
+
+                const paramConv = {
+                  cpf: this.props.param.cpf,
+                  pedido: this.props.param.compreRapidoPedido,
+                  loja: this.props.adminh.Parametros.CDFIL,
+                  link_sefaz: linkNfce,
+                  nrnfce: Number(this.props.adminh.Parametros.ULTNFCE) + 1,
+                  nrecf: this.props.adminh.Parametros.CDCAIXA,
+                  cnpjnanota: this.props.param.cpfNaNota ? this.props.param.cpf : '',
+                };
+
+                Diversos.putLog(` /convenio/venda/atualiza: PAYLOAD : ${JSON.stringify(paramConv)}`);
+
+                const resultCompraRapidaConv = await this.apiv2.put(
+                  '/convenio/venda/atualiza',
+                  paramConv,
+                  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTY5NTc0Nzk5N30.2dymofjo9Cx1i1GfINcivkcXweTI2FKyOGu5ALOH2PY'
+                );
+
+                Diversos.putLog(` /convenio/venda/atualiza: RESULT => ${JSON.stringify(resultCompraRapidaConv)}`);
               }
 
               const paramApiNfce = {
                 cdfil: this.props.adminh.Parametros.CDFIL,
-                nrnfce: this.props.adminh.Parametros.ULTNFCE,
+                nrnfce: Number(this.props.adminh.Parametros.ULTNFCE) + 1,
                 serienfce: this.props.adminh.Parametros.CDCAIXA,
                 link: linkNfce,
                 cpf: this.props.param.cpfClube ? this.props.param.cpf : '',
@@ -890,6 +910,39 @@ class Step5 extends React.Component<Props> {
             continue;
           }
 
+          // BUSCA NUMERO DA ULTIMA NFCE EMITIDA NO INVOICE
+          const ptrNumUltNfe = '';
+
+          const resultaInfoNFCeDaruma = this.props.daruma.rRetornarInformacao_NFCe_Daruma(
+            'NUM',
+            '0',
+            '0',
+            Number(this.props.adminh.Parametros.CDCAIXA).toFixed(0),
+            '',
+            '9',
+            ptrNumUltNfe
+          );
+
+          if (resultaInfoNFCeDaruma == 1) {
+            Diversos.putLog(`--> Buscando xml`);
+
+            const xmlRetorno = fs.readFileSync(path.resolve(this.props.adminh.Parametros.PASTANFCE, 'documentosRetorno.xml'), 'utf-8');
+
+            const regex = /<DocNumero>(.+?)<\/DocNumero>/;
+
+            const tmpNumUltNfe = regex.exec(xmlRetorno.toString('utf-8'));
+
+            Diversos.putLog(`--> Retorno localizado: ${JSON.stringify(tmpNumUltNfe)}`);
+
+            const numUltNfe = Number(tmpNumUltNfe[1]);
+
+            if (numUltNfe > numNFCe) {
+              numNFCe = numUltNfe;
+            }
+
+            Diversos.putLog(`--> Numero atualizado com sucesso`);
+          }
+
           adminh.Parametros.ULTNFCE = numNFCe;
 
           Diversos.putIni(adminh);
@@ -1235,7 +1288,11 @@ class Step5 extends React.Component<Props> {
 
       Diversos.putLog(`Control + E | Payload: ${JSON.stringify(param)}`);
 
-      const { data, status } = await this.apiv2.post('/selfcheckout/controlE', param);
+      const { data, status } = await this.apiv2.post(
+        '/selfcheckout/controlE',
+        param,
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTY5NTc0Nzk5N30.2dymofjo9Cx1i1GfINcivkcXweTI2FKyOGu5ALOH2PY'
+      );
 
       Diversos.putLog(`Control + | Retorno Status: ${status} | Retorno Data: ${JSON.stringify(data)}`);
 
@@ -1538,7 +1595,7 @@ class Step5 extends React.Component<Props> {
     }
 
     for (let i = 0; i < this.props.cart.produtos.length; i++) {
-      if (![1,2,3].includes(Number(this.props.cart.produtos[i].tipogru))) {
+      if (![1, 2, 3].includes(Number(this.props.cart.produtos[i].tipogru))) {
         let precoFinal = Number(this.props.cart.produtos[i].pmc);
 
         if (this.props.cart.produtos[i].preco && Number(this.props.cart.produtos[i].pmc) > Number(0)) {

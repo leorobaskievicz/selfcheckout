@@ -120,18 +120,19 @@ class Step1 extends React.Component<Props> {
           <h3>
             Para começar, <strong>escaneie</strong> sua <strong>pré-venda</strong> ou o <strong>código de barras</strong> do produto
           </h3>
-          {
-            this.props.adminh.Parametros.FGFEIRA === "Sim"
-            ? <>
+          {this.props.adminh.Parametros.FGFEIRA === 'Sim' ? (
+            <>
               <p className="opcao-step-1">OU</p>
               <Button
                 size="large"
                 color="primary"
                 variant="contained"
+                fullWidth
                 sx={{
                   mt: 3,
-                  px: 15,
+                  px: 3,
                   py: 2,
+                  ml: 2,
                   bgcolor: '#e9a447',
                   color: '#ffff',
                   fontSize: '1.3rem',
@@ -150,8 +151,7 @@ class Step1 extends React.Component<Props> {
                 Comprar para entrega
               </Button>
             </>
-            : null
-          }
+          ) : null}
           <input
             ref={this.inputRef}
             name="leitor"

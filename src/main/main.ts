@@ -10,7 +10,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 // import path from 'path';
-import { app, BrowserWindow, shell, ipcMain, screen, dialog } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, screen, dialo, Notification } from 'electron';
 const { autoUpdater } = require('electron-updater');
 // import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
@@ -80,7 +80,7 @@ const createWindow = async () => {
     show: false,
     width: 1440,
     height: 900,
-    icon: getAssetPath('icon.png'),
+    icon: getAssetPath('pilot-self.png'),
     frame: isDebug ? true : false,
     kiosk: isDebug ? false : true,
     fullscreen: true,
@@ -154,7 +154,7 @@ const createSecondWindow = async () => {
       fullscreen: true,
       autoHideMenuBar: true,
 
-      icon: getAssetPath('icon.png'),
+      icon: getAssetPath('pilot-self.png'),
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: false,
@@ -262,6 +262,12 @@ app
         autoUpdater.on('update-downloaded', () => {
           fs.appendFileSync(adminh.Parametros.LOGFILE, `autoUpdater::update-downloaded\n`);
           fs.writeFileSync(msgLoadLocation, `Última atualização baixada com sucesso.\n`);
+
+          new Notification({
+            title: 'Atualização disponível',
+            body: 'O programa irá se auto-atualizar!',
+          }).show();
+
           resolve('Download da atualização feito com sucesso');
         });
       });
@@ -276,7 +282,7 @@ app
       });
 
       setTimeout(() => {
-        autoUpdater.quitAndInstall(false, true);
+        autoUpdater.quitAndInstall(true, true);
       }, 1000);
     });
 

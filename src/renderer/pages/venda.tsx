@@ -38,6 +38,7 @@ const { app } = require('@electron/remote');
 
 const fs = remote.require('fs');
 const path = require('path');
+const { exec } = remote.require('child_process');
 
 const koffi = remote.require('koffi');
 const child = remote.require('child_process').execFile;
@@ -177,6 +178,24 @@ class Venda extends React.Component<Props> {
         Diversos.putLoadingMsg(`Atualizando produtos`);
         await this.loadProdutosLocal(true);
       }
+
+      Diversos.putLoadingMsg(`Habilitando modo kioski`);
+
+      setTimeout(() => {
+        exec('taskkill /f /im explorer.exe', (error, stdout, stderr) => {
+          if (error) {
+            Diversos.putLog(`Erro ao executar o comando: ${error.message}`);
+            return;
+          }
+
+          if (stderr) {
+            Diversos.putLog(`Erro no comando: ${stderr}`);
+            return;
+          }
+
+          // console.log(`Saída do comando: ${stdout}`);
+        });
+      }, 1000 * 5); // atrasa 5 segundo
 
       Diversos.putLoadingMsg(`Inicialização concluída com sucesso`);
 
