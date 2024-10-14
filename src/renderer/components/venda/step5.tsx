@@ -193,11 +193,13 @@ class Step5 extends React.Component<Props> {
         ) {
           try {
             // BUSCA LINK DA ULTIMA NFCE
-            const linkNfce = await this.handleGetLinkUltNfce();
+            let linkNfce = await this.handleGetLinkUltNfce();
 
             if (!linkNfce) {
               Diversos.putLog('Não foi possível recuperar Link da NFCe emitida');
             } else {
+              linkNfce = linkNfce + 1;
+
               if (Number(this.props.param.compreRapidoPedido) > Number(0)) {
                 Diversos.putLog(`Pedido de Compra Rápida vai transmitir Link da NFCe`);
 
@@ -234,7 +236,11 @@ class Step5 extends React.Component<Props> {
 
                 Diversos.putLog(` /convenio/venda/atualiza: PAYLOAD : ${JSON.stringify(paramConv)}`);
 
-                const resultCompraRapidaConv = await this.api.put('/convenio/venda/atualiza', paramCompraRapida);
+                const resultCompraRapidaConv = await this.apiv2.put(
+                  '/convenio/venda/atualiza',
+                  paramCompraRapida,
+                  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTY5NTc0Nzk5N30.2dymofjo9Cx1i1GfINcivkcXweTI2FKyOGu5ALOH2PY'
+                );
 
                 Diversos.putLog(` /convenio/venda/atualiza: RESULT => ${JSON.stringify(resultCompraRapidaConv)}`);
               }
@@ -1284,7 +1290,11 @@ class Step5 extends React.Component<Props> {
 
       Diversos.putLog(`Control + E | Payload: ${JSON.stringify(param)}`);
 
-      const { data, status } = await this.apiv2.post('/selfcheckout/controlE', param);
+      const { data, status } = await this.apiv2.post(
+        '/selfcheckout/controlE',
+        param,
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTY5NTc0Nzk5N30.2dymofjo9Cx1i1GfINcivkcXweTI2FKyOGu5ALOH2PY'
+      );
 
       Diversos.putLog(`Control + | Retorno Status: ${status} | Retorno Data: ${JSON.stringify(data)}`);
 

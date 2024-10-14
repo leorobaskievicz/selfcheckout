@@ -162,7 +162,7 @@ class CardProduto extends React.Component<Props> {
       ...this.props.param,
       controlE_DtEntrega: moment().utcOffset('-03:00').add(10, 'days').format('DD/MM/YYYY'),
       controlE_HrEntrega: '19:00:00',
-      controlE_formaent: 'Entrega Agendada',
+      controlE_formaent: 'c',
     });
 
     let precoFinal = produ.PRECO;

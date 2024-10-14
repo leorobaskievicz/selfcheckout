@@ -10,7 +10,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 // import path from 'path';
-import { app, BrowserWindow, shell, ipcMain, screen, dialog } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, screen, dialo, Notification } from 'electron';
 const { autoUpdater } = require('electron-updater');
 // import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
@@ -262,6 +262,12 @@ app
         autoUpdater.on('update-downloaded', () => {
           fs.appendFileSync(adminh.Parametros.LOGFILE, `autoUpdater::update-downloaded\n`);
           fs.writeFileSync(msgLoadLocation, `Última atualização baixada com sucesso.\n`);
+
+          new Notification({
+            title: 'Atualização disponível',
+            body: 'O programa irá se auto-atualizar!',
+          }).show();
+
           resolve('Download da atualização feito com sucesso');
         });
       });
