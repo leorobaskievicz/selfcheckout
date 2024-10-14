@@ -890,6 +890,39 @@ class Step5 extends React.Component<Props> {
             continue;
           }
 
+          // BUSCA NUMERO DA ULTIMA NFCE EMITIDA NO INVOICE
+          const ptrNumUltNfe = '';
+
+          const resultaInfoNFCeDaruma = this.props.daruma.rRetornarInformacao_NFCe_Daruma(
+            'NUM',
+            '0',
+            '0',
+            Number(this.props.adminh.Parametros.CDCAIXA).toFixed(0),
+            '',
+            '9',
+            ptrNumUltNfe
+          );
+
+          if (resultaInfoNFCeDaruma == 1) {
+            Diversos.putLog(`--> Buscando xml`);
+
+            const xmlRetorno = fs.readFileSync(path.resolve(this.props.adminh.Parametros.PASTANFCE, 'documentosRetorno.xml'), 'utf-8');
+
+            const regex = /<DocNumero>(.+?)<\/DocNumero>/;
+
+            const tmpNumUltNfe = regex.exec(xmlRetorno.toString('utf-8'));
+
+            Diversos.putLog(`--> Retorno localizado: ${JSON.stringify(tmpNumUltNfe)}`);
+
+            const numUltNfe = Number(tmpNumUltNfe[1]);
+
+            if (numUltNfe > numNFCe) {
+              numNFCe = numUltNfe;
+            }
+
+            Diversos.putLog(`--> Numero atualizado com sucesso`);
+          }
+
           adminh.Parametros.ULTNFCE = numNFCe;
 
           Diversos.putIni(adminh);
@@ -1538,7 +1571,7 @@ class Step5 extends React.Component<Props> {
     }
 
     for (let i = 0; i < this.props.cart.produtos.length; i++) {
-      if (![1,2,3].includes(Number(this.props.cart.produtos[i].tipogru))) {
+      if (![1, 2, 3].includes(Number(this.props.cart.produtos[i].tipogru))) {
         let precoFinal = Number(this.props.cart.produtos[i].pmc);
 
         if (this.props.cart.produtos[i].preco && Number(this.props.cart.produtos[i].pmc) > Number(0)) {
