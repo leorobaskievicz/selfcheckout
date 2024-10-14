@@ -2,11 +2,11 @@
   "name": "selfcheckout",
   "productName": "selfcheckout",
   "artifactName": "${productName}.${ext}",
-  "version": "1.1.14",
-  "description": "Caixa Self Checkout CallFarma",
+  "version": "1.2.0",
+  "description": "Pilot Self",
   "iniName": "ADMINH.ini",
   "author": "Pilot Self",
-  "homepage": "https://callfarma.com.br",
+  "homepage": "https://pilotself.com.br",
   "main": "./src/main/main.ts",
   "scripts": {
     "build": "node pre-build.js && concurrently \"npm run build:main\" \"npm run build:renderer\"",
@@ -145,11 +145,11 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "buildVersion": "1.1.14",
+    "buildVersion": "1.2.0",
     "npmRebuild": false,
     "productName": "selfcheckout",
     "artifactName": "${productName}.${ext}",
-    "appId": "br.com.callfarma.caixa",
+    "appId": "br.com.pilotself.selfcheckout",
     "compression": "maximum",
     "asar": true,
     "asarUnpack": "**\\*.{dll}",
@@ -164,10 +164,14 @@
     ],
     "afterSign": ".erb/scripts/notarize.js",
     "win": {
+      "icon": "assets/icon.ico",
       "artifactName": "${productName}.${ext}",
       "target": [
         {
-          "target": "nsis"
+          "target": "nsis",
+          "arch": [
+            "ia32"
+          ]
         }
       ]
     },
@@ -196,7 +200,9 @@
       "uninstallDisplayName": "${productName}",
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "${productName}"
+      "shortcutName": "${productName}",
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico"
     }
   },
   "devEngines": {

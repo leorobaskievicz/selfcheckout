@@ -155,7 +155,14 @@ class CardProduto extends React.Component<Props> {
       lojaOrigem: 13,
       vdvd: 'N',
       vendedor: '',
-      formaEnt: '',
+      formaEnt: 'c',
+    });
+
+    this.props.setParam({
+      ...this.props.param,
+      controlE_DtEntrega: moment().utcOffset('-03:00').add(10, 'days').format('DD/MM/YYYY'),
+      controlE_HrEntrega: '19:00:00',
+      controlE_formaent: 'c',
     });
 
     let precoFinal = produ.PRECO;
@@ -457,31 +464,6 @@ class CardProduto extends React.Component<Props> {
             >
               <p className="indisponivel">Saiba mais</p>
             </a>
-          ) : this.state.temVdvd ? (
-            Number(this.state.produto.TIPOPBM) > 0 && Number(this.state.produto.PRECOPBM) > 0 ? (
-              <div className="btn btn-success btn-block btn-cart" onClick={(event) => null}>
-                <p>
-                  Consultar <i className="fas fa-search ml-1"></i>
-                </p>
-              </div>
-            ) : (
-              <div
-                className="btn btn-cart"
-                onClick={(event) => {
-                  event.preventDefault();
-                  this.handleAddCart(this.state.produto);
-                }}
-              >
-                Comprar
-                <span>{qtdCesta || ''}</span>
-              </div>
-            )
-          ) : this.state.produto.ESTOQUE > 0 && Number(this.state.produto.TIPOPBM) > 0 && Number(this.state.produto.PRECOPBM) > 0 ? (
-            <div className="btn btn-success btn-block btn-cart" onClick={(event) => null}>
-              <p>
-                Consultar <i className="fas fa-search ml-1"></i>
-              </p>
-            </div>
           ) : this.state.produto.ESTOQUE > 0 ? (
             <div
               className="btn btn-cart"
@@ -498,11 +480,7 @@ class CardProduto extends React.Component<Props> {
                 </span>
               ) : null}
             </div>
-          ) : (
-            <div className="btn-cart btn-cart-indisponivel" onClick={() => null}>
-              <p className="indisponivel">Indisponível</p>
-            </div>
-          )}
+          ) : null}
         </a>
       </>
     );

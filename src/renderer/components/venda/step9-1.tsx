@@ -60,10 +60,7 @@ class Step9 extends React.Component<Props> {
           }}
         >
           <div className="tela-finalizacao tela-cancelamento">
-            <h3>
-              Tem certeza que deseja excluir o item{' '}
-              {this.props.param.exclusaoItemNome}?
-            </h3>
+            <h3>Tem certeza que deseja excluir o item {this.props.param.exclusaoItemNome}?</h3>
             <Button
               size="large"
               variant="contained"
@@ -126,7 +123,6 @@ const mapStateToProps = (state: ApplicationState) => ({
   cart: state.cart.data,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators({ ...ParamActions, ...CartActions }, dispatch);
+const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({ ...ParamActions, ...CartActions }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Step9);

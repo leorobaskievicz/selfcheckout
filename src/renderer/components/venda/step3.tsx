@@ -40,6 +40,7 @@ import { Diversos } from '../../services/diversos';
 import { grey } from '@mui/material/colors';
 import Api from '../../services/api';
 import ApiV2 from '../../services/apiv2';
+import { ArrowBack } from '@mui/icons-material';
 
 const AudioCaixa = '../../../assets/audio/cpf-na-nota.mp3';
 
@@ -92,7 +93,10 @@ class Step3 extends React.Component<Props> {
       formBairro: '',
       formCidade: '',
       formUf: '',
+      formTelefone: '',
       isLoadingCep: false,
+
+      formIsLoading: false,
 
       isSubmitting: false,
     };
@@ -139,6 +143,11 @@ class Step3 extends React.Component<Props> {
       return false;
     }
 
+    if (!this.state.formTelefone) {
+      swal('UF inválido', 'O Celular informado não é válido.', 'warning');
+      return false;
+    }
+
     this.setState({ isSubmitting: true });
 
     try {
@@ -148,6 +157,7 @@ class Step3 extends React.Component<Props> {
         cpf: this.props.param.cpf,
         nome: this.state.formNome,
         nascimento: this.state.formNascimento,
+        tel: this.state.formTelefone,
         cep: this.state.formCep,
         rua: this.state.formRua,
         numero: this.state.formNumero,
@@ -168,6 +178,13 @@ class Step3 extends React.Component<Props> {
             formNome: response1.data.cliente.nome,
             formNascimento: response1.data.cliente.nascimento,
             formDataconserasa: response1.data.cliente.dataconserasa,
+            // formCep: response1.data.cliente.dataconserasa,
+            // formRua: response1.data.cliente.rua,
+            // formNumero: response1.data.cliente.numero,
+            // formComplemento: response1.data.cliente.complemento,
+            // formBairro: response1.data.cliente.bairro,
+            // formCidade: response1.data.cliente.cidade,
+            // formUf: response1.data.cliente.uf,
           });
         } else {
           const response2 = await this.api.post('/Cliente/criaCPF', { cpf: Diversos.policia(this.props.param.cpf) });
@@ -250,6 +267,37 @@ class Step3 extends React.Component<Props> {
     return true;
   }
 
+  async handleModalEndereco() {
+    this.setState({ modalEndereco: true, formIsLoading: true });
+
+    try {
+      const param = { cpf: this.props.param.cpf };
+
+      const response1 = await this.api.post(`/Cliente/consulta`, param);
+
+      if (response1.data.status === true || response1.data.fgConta === true || response1.data.fgCadastro === false) {
+        this.setState({
+          formCodigo: response1.data.cliente.codigo,
+          formNome: response1.data.cliente.nome,
+          formNascimento: response1.data.cliente.nascimento,
+          formDataconserasa: response1.data.cliente.dataconserasa,
+          formTelefone: Diversos.maskTelefone(response1.data.cliente.telefone1),
+          formCep: response1.data.cliente.cep,
+          formRua: response1.data.cliente.rua,
+          formNumero: response1.data.cliente.numero,
+          formComplemento: response1.data.cliente.complemento,
+          formBairro: response1.data.cliente.bairro,
+          formCidade: response1.data.cliente.cidade,
+          formUf: response1.data.cliente.uf,
+        });
+      }
+    } catch (e) {
+      Diversos.putLog(`handleModalEndereco: ERROR | ${e.message}`);
+    } finally {
+      this.setState({ modalEndereco: true, formIsLoading: false });
+    }
+  }
+
   renderModalEndereco() {
     const style = {
       position: 'absolute',
@@ -282,6 +330,29 @@ class Step3 extends React.Component<Props> {
           <CardContent sx={{ p: 0 }}>
             <form noValidate autoComplete="off" onSubmit={this.handleSubmitCliente.bind(this)}>
               <Grid container spacing={1}>
+                {this.state.formIsLoading ? (
+                  <Grid item xs={12}>
+                    <Typography variant="h4" sx={{ fontSize: '1.3rem', fontWeight: '500', color: 'primary.main', textAlign: 'center' }}>
+                      <CircularProgress size={40} color="primary" />
+                      <br />
+                      Pesquisando CPF...
+                    </Typography>
+                  </Grid>
+                ) : null}
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Celular"
+                    margin="dense"
+                    variant="outlined"
+                    required
+                    id="formTelefone"
+                    name="formTelefone"
+                    value={this.state.formTelefone}
+                    onChange={(event) => this.setState({ formTelefone: Diversos.maskTelefone(Diversos.getnums(event.target.value)) })}
+                    disabled={this.state.isSubmitting || this.state.formIsLoading || this.state.isLoadingCep}
+                  />
+                </Grid>
                 <Grid item xs={6}>
                   <TextField
                     fullWidth
@@ -303,7 +374,7 @@ class Step3 extends React.Component<Props> {
                         </>
                       ) : null
                     }
-                    disabled={this.state.isSubmitting || this.state.isLoadingCep}
+                    disabled={this.state.isSubmitting || this.state.formIsLoading || this.state.isLoadingCep}
                   />
                 </Grid>
                 <Grid item xs={6} />
@@ -318,7 +389,7 @@ class Step3 extends React.Component<Props> {
                     name="formRua"
                     value={this.state.formRua}
                     onChange={(event) => this.setState({ formRua: event.target.value })}
-                    disabled={this.state.isSubmitting || this.state.isLoadingCep}
+                    disabled={this.state.isSubmitting || this.state.formIsLoading || this.state.isLoadingCep}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -332,7 +403,7 @@ class Step3 extends React.Component<Props> {
                     name="formNumero"
                     value={this.state.formNumero}
                     onChange={(event) => this.setState({ formNumero: event.target.value })}
-                    disabled={this.state.isSubmitting}
+                    disabled={this.state.isSubmitting || this.state.formIsLoading}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -345,7 +416,7 @@ class Step3 extends React.Component<Props> {
                     name="formComplemento"
                     value={this.state.formComplemento}
                     onChange={(event) => this.setState({ formComplemento: event.target.value })}
-                    disabled={this.state.isSubmitting}
+                    disabled={this.state.isSubmitting || this.state.formIsLoading}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -359,7 +430,7 @@ class Step3 extends React.Component<Props> {
                     name="formBairro"
                     value={this.state.formBairro}
                     onChange={(event) => this.setState({ formBairro: event.target.value })}
-                    disabled={this.state.isSubmitting || this.state.isLoadingCep}
+                    disabled={this.state.isSubmitting || this.state.formIsLoading || this.state.isLoadingCep}
                   />
                 </Grid>
                 <Grid item xs={8}>
@@ -373,11 +444,16 @@ class Step3 extends React.Component<Props> {
                     name="formCidade"
                     value={this.state.formCidade}
                     onChange={(event) => this.setState({ formCidade: event.target.value })}
-                    disabled={this.state.isSubmitting || this.state.isLoadingCep}
+                    disabled={this.state.isSubmitting || this.state.formIsLoading || this.state.isLoadingCep}
                   />
                 </Grid>
                 <Grid item xs={4}>
-                  <FormControl fullWidth margin="dense" required disabled={this.state.isSubmitting || this.state.isLoadingCep}>
+                  <FormControl
+                    fullWidth
+                    margin="dense"
+                    required
+                    disabled={this.state.isSubmitting || this.state.formIsLoading || this.state.isLoadingCep}
+                  >
                     <InputLabel id="select-estado-label">Estado</InputLabel>
                     <Select
                       labelId="select-estado-label"
@@ -385,7 +461,7 @@ class Step3 extends React.Component<Props> {
                       value={this.state.formUf}
                       label="Estado"
                       onChange={(event) => this.setState({ formUf: event.target.value })}
-                      disabled={this.state.isSubmitting || this.state.isLoadingCep}
+                      disabled={this.state.isSubmitting || this.state.formIsLoading || this.state.isLoadingCep}
                     >
                       {Diversos.getUFs().map((row, index) => (
                         <MenuItem key={`uf-${row.value}`} value={row.value}>
@@ -402,7 +478,7 @@ class Step3 extends React.Component<Props> {
                     onClick={() => this.setState({ modalEndereco: false })}
                     sx={{ ml: 0.5, borderColor: grey[500], color: grey[500] }}
                     variant="outlined"
-                    disabled={this.state.isSubmitting || this.state.isLoadingCep}
+                    disabled={this.state.isSubmitting || this.state.formIsLoading || this.state.isLoadingCep}
                   >
                     <CloseIcon sx={{ mr: 0.5 }} />
                     Cancelar
@@ -415,7 +491,7 @@ class Step3 extends React.Component<Props> {
                     color="primary"
                     type="submit"
                     sx={{ mr: 0.5 }}
-                    disabled={this.state.isSubmitting || this.state.isLoadingCep}
+                    disabled={this.state.isSubmitting || this.state.formIsLoading || this.state.isLoadingCep}
                   >
                     {this.state.isSubmitting ? (
                       <>
@@ -452,7 +528,7 @@ class Step3 extends React.Component<Props> {
             padding: 20,
           }}
         >
-          <h2>Deseja inserir CPF ou CNPJ na nota?</h2>
+          {this.props.adminh.Parametros.FGFEIRA === 'Sim' ? <h2>Informe seu CPF abaixo</h2> : <h2>Deseja inserir CPF ou CNPJ na nota?</h2>}
           <TextField
             autoFocus
             name="cpfNaNota"
@@ -704,34 +780,57 @@ class Step3 extends React.Component<Props> {
               </Button>
             </div>
           ) : (
-            <Button
-              style={{
-                width: '100%',
-                paddingVertical: 10,
-                marginTop: 15,
-                marginBottom: 15,
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-              variant="contained"
-              fullWidth
-              size="large"
-              sx={{ bgcolor: '#5cb85c', py: 3, '&:hover': { bgcolor: '#276927' } }}
-              onClick={() => {
-                if (!this.props.param.cpf || !Diversos.validateCPF(this.props.param.cpf)) {
-                  swal('Necessário informar o CPF', 'Para continuarmos informe o CPF', 'info');
-                } else {
-                  this.setState({ modalEndereco: true });
-                }
-              }}
-            >
-              <LocationOnIcon sx={{ mr: 0.3, fontSize: '3rem' }} />
-              <Typography sx={{ fontSize: '1.3rem', fontWeight: '700', fontFamily: 'Roboto', color: 'white' }}>
-                Informar Endereço de Entrega e Continuar
-              </Typography>
-            </Button>
+            <>
+              <Button
+                style={{
+                  width: '100%',
+                  paddingVertical: 10,
+                  marginTop: 15,
+                  marginBottom: 15,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                variant="contained"
+                fullWidth
+                size="large"
+                sx={{ bgcolor: '#5cb85c', py: 3, '&:hover': { bgcolor: '#276927' } }}
+                onClick={() => {
+                  if (!this.props.param.cpf || !Diversos.validateCPF(this.props.param.cpf)) {
+                    swal('Necessário informar o CPF', 'Para continuarmos informe o CPF', 'info');
+                  } else {
+                    this.handleModalEndereco();
+                    // this.setState({ modalEndereco: true });
+                  }
+                }}
+              >
+                <LocationOnIcon sx={{ mr: 0.3, fontSize: '3rem' }} />
+                <Typography sx={{ fontSize: '1.3rem', fontWeight: '700', fontFamily: 'Roboto', color: 'white' }}>
+                  Informar Endereço de Entrega e Continuar
+                </Typography>
+              </Button>
+              <Button
+                style={{
+                  width: '100%',
+                  paddingVertical: 10,
+                  marginTop: 15,
+                  marginBottom: 15,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                variant="outlined"
+                fullWidth
+                size="large"
+                sx={{ bgcolor: 'transparent', borderColor: 'white', color: 'white', py: 1.5 }}
+                onClick={() => this.props.setParam({ ...this.props.param, step: this.props.param.step - 1 })}
+              >
+                <ArrowBack sx={{ mr: 0.3, fontSize: '3rem' }} />
+                <Typography sx={{ fontSize: '1.3rem', fontWeight: '700', fontFamily: 'Roboto', color: 'white' }}>Voltar</Typography>
+              </Button>
+            </>
           )}
         </Grid>
 
