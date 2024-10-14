@@ -127,10 +127,12 @@ class Step1 extends React.Component<Props> {
                 size="large"
                 color="primary"
                 variant="contained"
+                fullWidth
                 sx={{
                   mt: 3,
                   px: 3,
                   py: 2,
+                  ml: 2,
                   bgcolor: '#e9a447',
                   color: '#ffff',
                   fontSize: '1.3rem',

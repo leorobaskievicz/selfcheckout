@@ -1116,6 +1116,31 @@ class Step2 extends React.Component<Props> {
               </Button>
             </>
           ) : null}
+
+          {this.props.adminh.Parametros.FGFEIRA === 'Sim' ? (
+            <Button
+              size="small"
+              variant="text"
+              sx={{
+                backgroundColor: 'white',
+                borderSize: 0,
+                color: 'dark',
+                mt: 2,
+                height: 40,
+                width: '90%',
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                fontSize: '1.3rem',
+              }}
+              onClick={() => this.props.setParam({ ...this.props.param, step: 10 })}
+            >
+              <FontAwesomeIcon icon={faArrowLeft} />
+              Voltar
+              <div />
+            </Button>
+          ) : null}
           {/* eslint-enable no-nested-ternary */}
         </Grid>
 

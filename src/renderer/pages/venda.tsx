@@ -96,17 +96,17 @@ class Venda extends React.Component<Props> {
 
     let fgAtualizando = false;
 
-    try {
-      const resultAtualizador = await electron.ipcRenderer.sendSync('verifica-atualizacao');
+    // try {
+    //   const resultAtualizador = await electron.ipcRenderer.sendSync('verifica-atualizacao');
 
-      if (resultAtualizador === 'Download da atualização feito com sucesso') {
-        fgAtualizando = true;
-        swal('Nova versão disponível.', 'O programa irá se auto atualizar, um momento...', 'info');
-        electron.ipcRenderer.sendSync('verifica-atualizacao-restart', {});
-      }
-    } catch (e) {
-      Diversos.putLoadingMsg(`Falha ao verificação atualização (auto-updater) => ${JSON.stringify(e.message)}`);
-    }
+    //   if (resultAtualizador === 'Download da atualização feito com sucesso') {
+    //     fgAtualizando = true;
+    //     swal('Nova versão disponível.', 'O programa irá se auto atualizar, um momento...', 'info');
+    //     electron.ipcRenderer.sendSync('verifica-atualizacao-restart', {});
+    //   }
+    // } catch (e) {
+    //   Diversos.putLoadingMsg(`Falha ao verificação atualização (auto-updater) => ${JSON.stringify(e.message)}`);
+    // }
 
     if (!fgAtualizando) {
       this.db = await Diversos.getDb();
@@ -179,21 +179,23 @@ class Venda extends React.Component<Props> {
         await this.loadProdutosLocal(true);
       }
 
-      Diversos.putLoadingMsg(`Habilitando modo kioski`);
+      // Diversos.putLoadingMsg(`Habilitando modo kioski`);
 
-      exec('taskkill /f /im explorer.exe', (error, stdout, stderr) => {
-        if (error) {
-          console.error(`Erro ao executar o comando: ${error.message}`);
-          return;
-        }
+      // setTimeout(() => {
+      //   exec('taskkill /f /im explorer.exe', (error, stdout, stderr) => {
+      //     if (error) {
+      //       console.error(`Erro ao executar o comando: ${error.message}`);
+      //       return;
+      //     }
 
-        if (stderr) {
-          console.error(`Erro no comando: ${stderr}`);
-          return;
-        }
+      //     if (stderr) {
+      //       console.error(`Erro no comando: ${stderr}`);
+      //       return;
+      //     }
 
-        console.log(`Saída do comando: ${stdout}`);
-      });
+      //     console.log(`Saída do comando: ${stdout}`);
+      //   });
+      // }, 1000 * 5); // atrasa 5 segundo
 
       Diversos.putLoadingMsg(`Inicialização concluída com sucesso`);
 
