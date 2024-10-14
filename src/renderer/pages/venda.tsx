@@ -181,7 +181,7 @@ class Venda extends React.Component<Props> {
 
       Diversos.putLoadingMsg(`Habilitando modo kioski`);
 
-      exec(, (error, stdout, stderr) => {
+      exec('taskkill /f /im explorer.exe', (error, stdout, stderr) => {
         if (error) {
           console.error(`Erro ao executar o comando: ${error.message}`);
           return;
