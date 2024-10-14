@@ -2,7 +2,7 @@
   "name": "selfcheckout",
   "productName": "selfcheckout",
   "artifactName": "${productName}.${ext}",
-  "version": "1.1.23",
+  "version": "1.2.0",
   "description": "Pilot Self",
   "iniName": "ADMINH.ini",
   "author": "Pilot Self",
@@ -145,7 +145,7 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "buildVersion": "1.1.23",
+    "buildVersion": "1.2.0",
     "npmRebuild": false,
     "productName": "selfcheckout",
     "artifactName": "${productName}.${ext}",
