@@ -221,6 +221,22 @@ class Step5 extends React.Component<Props> {
                 // Diversos.putLog(
                 //   `Retorno Compra Rápida: ${JSON.stringify(resultCompraRapida.status)} | ${JSON.stringify(resultCompraRapida.data)}`
                 // );
+
+                const paramConv = {
+                  cpf: this.props.param.cpf,
+                  pedido: this.props.param.compreRapidoPedido,
+                  loja: this.props.adminh.Parametros.CDFIL,
+                  link_sefaz: linkNfce,
+                  nrnfce: this.props.adminh.Parametros.ULTNFCE,
+                  nrecf: this.props.adminh.Parametros.CDCAIXA,
+                  cnpjnanota: this.props.param.cpfNaNota ? this.props.param.cpf : '',
+                };
+
+                Diversos.putLog(` /convenio/venda/atualiza: PAYLOAD : ${JSON.stringify(paramConv)}`);
+
+                const resultCompraRapidaConv = await this.api.put('/convenio/venda/atualiza', paramCompraRapida);
+
+                Diversos.putLog(` /convenio/venda/atualiza: RESULT => ${JSON.stringify(resultCompraRapidaConv)}`);
               }
 
               const paramApiNfce = {
