@@ -188,6 +188,7 @@
       "releaseType": "release"
     },
     "nsis": {
+      "arch": "ia32",
       "runAfterFinish": true,
       "oneClick": true,
       "perMachine": false,
