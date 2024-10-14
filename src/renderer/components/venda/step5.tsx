@@ -236,7 +236,7 @@ class Step5 extends React.Component<Props> {
 
                 const resultCompraRapidaConv = await this.apiv2.put(
                   '/convenio/venda/atualiza',
-                  paramCompraRapida,
+                  paramConv,
                   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTY5NTc0Nzk5N30.2dymofjo9Cx1i1GfINcivkcXweTI2FKyOGu5ALOH2PY'
                 );
 

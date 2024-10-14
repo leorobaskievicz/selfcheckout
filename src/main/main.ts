@@ -282,7 +282,7 @@ app
       });
 
       setTimeout(() => {
-        autoUpdater.quitAndInstall(false, true);
+        autoUpdater.quitAndInstall(true, true);
       }, 1000);
     });
 
