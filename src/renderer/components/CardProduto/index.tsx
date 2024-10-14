@@ -155,7 +155,7 @@ class CardProduto extends React.Component<Props> {
       lojaOrigem: 13,
       vdvd: 'N',
       vendedor: '',
-      formaEnt: '',
+      formaEnt: 'c',
     });
 
     this.props.setParam({

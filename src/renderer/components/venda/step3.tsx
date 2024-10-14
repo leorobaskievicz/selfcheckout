@@ -282,7 +282,7 @@ class Step3 extends React.Component<Props> {
           formNascimento: response1.data.cliente.nascimento,
           formDataconserasa: response1.data.cliente.dataconserasa,
           formTelefone: Diversos.maskTelefone(response1.data.cliente.telefone1),
-          formCep: response1.data.cliente.dataconserasa,
+          formCep: response1.data.cliente.cep,
           formRua: response1.data.cliente.rua,
           formNumero: response1.data.cliente.numero,
           formComplemento: response1.data.cliente.complemento,
