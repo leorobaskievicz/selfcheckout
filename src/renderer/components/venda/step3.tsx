@@ -528,7 +528,7 @@ class Step3 extends React.Component<Props> {
             padding: 20,
           }}
         >
-          <h2>Deseja inserir CPF ou CNPJ na nota?</h2>
+          {this.props.adminh.Parametros.FGFEIRA === 'Sim' ? <h2>Informe seu CPF abaixo</h2> : <h2>Deseja inserir CPF ou CNPJ na nota?</h2>}
           <TextField
             autoFocus
             name="cpfNaNota"

@@ -221,15 +221,18 @@ class Step2 extends React.Component<Props> {
   }
 
   private handleDropProduto(idx) {
-    // this.props.drop(this.props.cart.produtos[idx].rowid);
     Diversos.putLog(`-> Solicitado cancelamento do item: ${this.props.cart.produtos[idx].nome}`);
 
-    this.props.setParam({
-      ...this.props.param,
-      exclusaoItemCodigo: this.props.cart.produtos[idx].codigo,
-      exclusaoItemNome: this.props.cart.produtos[idx].nome,
-      step: 9,
-    });
+    if (this.props.adminh.Parametros.FGFEIRA === 'Sim') {
+      this.props.drop(this.props.cart.produtos[idx].rowid);
+    } else {
+      this.props.setParam({
+        ...this.props.param,
+        exclusaoItemCodigo: this.props.cart.produtos[idx].codigo,
+        exclusaoItemNome: this.props.cart.produtos[idx].nome,
+        step: 9,
+      });
+    }
   }
 
   private handleFormaPg(formaPg: number, parcela = null) {
@@ -250,7 +253,54 @@ class Step2 extends React.Component<Props> {
 
   private handleCancelaVenda() {
     Diversos.putLog(`-> Solicitado cancelamento geral da venda`);
-    this.props.setParam({ ...this.props.param, step: 7 });
+
+    if (this.props.adminh.Parametros.FGFEIRA === 'Sim') {
+      this.props.clean();
+
+      this.props.setParam({
+        ...this.props.param,
+        leitor: '',
+        step: 1,
+        vendedor: 1,
+        cpf: '',
+        celular: '',
+        nome: '',
+        formapg: 0,
+        formapgParcela: 1,
+        cpfNaNota: true,
+        cpfClube: true,
+        prevenda: '',
+        stepError: false,
+        stepErrorMsg: '',
+        bufferPrinter: '',
+        appConvenio: false,
+        appConvenioCodigo: '',
+        appConvenioUsuario: '',
+        cartaoNome: '',
+        cartaoRota: '',
+        cartaoNsu: '',
+        cartaoAutorizacao: '',
+        compreRapidoPedido: '',
+        pbm: false,
+        pbmTipo: '',
+        pbmCupom: '',
+        pbmNsu: '',
+        pbmNsuAdm: '',
+        pbmOperadora: '',
+        pbmAutorizacao: '',
+        pbmCartao: '',
+        pbmSubsidio: '',
+        pbmAutorizacaoPg: '',
+        pbmValorPg: '',
+        pbmDescTotal: '',
+        trnCentreAux: [],
+        controlE_formaent: '',
+        controlE_DtEntrega: '',
+        controlE_HrEntrega: '',
+      });
+    } else {
+      this.props.setParam({ ...this.props.param, step: 7 });
+    }
   }
 
   private async getProdu(
