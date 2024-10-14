@@ -198,8 +198,6 @@ class Step5 extends React.Component<Props> {
             if (!linkNfce) {
               Diversos.putLog('Não foi possível recuperar Link da NFCe emitida');
             } else {
-              linkNfce = linkNfce + 1;
-
               if (Number(this.props.param.compreRapidoPedido) > Number(0)) {
                 Diversos.putLog(`Pedido de Compra Rápida vai transmitir Link da NFCe`);
 
@@ -210,7 +208,7 @@ class Step5 extends React.Component<Props> {
                   convenio: this.props.param.appConvenioCodigo,
                   link: linkNfce,
                   cdfil: this.props.adminh.Parametros.CDFIL,
-                  nrnfce: this.props.adminh.Parametros.ULTNFCE,
+                  nrnfce: Number(this.props.adminh.Parametros.ULTNFCE) + 1,
                   serienfce: this.props.adminh.Parametros.CDCAIXA,
                 };
 
@@ -229,7 +227,7 @@ class Step5 extends React.Component<Props> {
                   pedido: this.props.param.compreRapidoPedido,
                   loja: this.props.adminh.Parametros.CDFIL,
                   link_sefaz: linkNfce,
-                  nrnfce: this.props.adminh.Parametros.ULTNFCE,
+                  nrnfce: Number(this.props.adminh.Parametros.ULTNFCE) + 1,
                   nrecf: this.props.adminh.Parametros.CDCAIXA,
                   cnpjnanota: this.props.param.cpfNaNota ? this.props.param.cpf : '',
                 };
@@ -247,7 +245,7 @@ class Step5 extends React.Component<Props> {
 
               const paramApiNfce = {
                 cdfil: this.props.adminh.Parametros.CDFIL,
-                nrnfce: this.props.adminh.Parametros.ULTNFCE,
+                nrnfce: Number(this.props.adminh.Parametros.ULTNFCE) + 1,
                 serienfce: this.props.adminh.Parametros.CDCAIXA,
                 link: linkNfce,
                 cpf: this.props.param.cpfClube ? this.props.param.cpf : '',
