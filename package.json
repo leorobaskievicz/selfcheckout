@@ -2,7 +2,7 @@
   "name": "selfcheckout",
   "productName": "selfcheckout",
   "artifactName": "${productName}.${ext}",
-  "version": "1.1.18",
+  "version": "1.1.19",
   "description": "Pilot Self",
   "iniName": "ADMINH.ini",
   "author": "Pilot Self",
@@ -145,7 +145,7 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "buildVersion": "1.1.18",
+    "buildVersion": "1.1.19",
     "npmRebuild": false,
     "productName": "selfcheckout",
     "artifactName": "${productName}.${ext}",
@@ -168,7 +168,10 @@
       "artifactName": "${productName}.${ext}",
       "target": [
         {
-          "target": "nsis"
+          "target": "nsis",
+          "arch": [
+            "ia32"
+          ]
         }
       ]
     },
@@ -188,7 +191,6 @@
       "releaseType": "release"
     },
     "nsis": {
-      "arch": "ia32",
       "runAfterFinish": true,
       "oneClick": true,
       "perMachine": false,
