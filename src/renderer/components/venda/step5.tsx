@@ -1008,6 +1008,10 @@ class Step5 extends React.Component<Props> {
 
       const numCuponsTelemaco = this.promocaoTelemacoCheck();
 
+      const numCuponsFilial30 = this.promocaoFilial30Check();
+
+      const numCuponsFilial17 = this.promocaoFilial17Check();
+
       const posOptions = {
         preview: false,
         margin: '0 0 0 0',
@@ -1206,6 +1210,142 @@ class Step5 extends React.Component<Props> {
           Diversos.putLog(`Imprimiu cupom(s) da promoção TELEMACO`);
         } catch (e) {
           Diversos.putLog(`Não imprimiu cupom(s) da promoção TELEMACO. Motivo: ${e}`);
+        }
+
+        await new Promise((resolve) => {
+          setTimeout(() => resolve(true), 500);
+        });
+      }
+
+      const cupom17Path = path.join(process.resourcesPath, 'assets', 'cupom-sorteio-filial-17.png');
+
+      Diversos.putLog(`Caminho do cupoms filial 17: ${cupom17Path}`);
+
+      for (let i = 0; i < numCuponsFilial17; i++) {
+        posData = [];
+
+        posData.push({
+          type: 'text',
+          value: `.`,
+          style: {},
+        });
+
+        posData.push({
+          type: 'text',
+          value: `<img src="${cupom17Path}" style="width: 275px; height: 490px; margin: 0px; padding: 0px;"/>`,
+          style: {},
+        });
+
+        posData.push({
+          type: 'text',
+          value: `<span style="margin-left: 75px; text-transform: uppercase;">${String(this.props.param.nome).substring(0, 20)}</span>`,
+          style: {
+            marginTop: '-230px',
+            textTrasnform: 'uppercase',
+            fontSize: 12,
+            fontWeight: 600,
+            fontFamily: 'Arial',
+            paddingLeft: 67,
+          },
+        });
+
+        posData.push({
+          type: 'text',
+          value: `<span style="margin-left: 55px; text-transform: uppercase;">${this.props.param.cpf} (self)</span>`,
+          style: {
+            marginTop: '14px',
+            textTrasnform: 'uppercase',
+            fontSize: 12,
+            fontWeight: 600,
+            fontFamily: 'Arial',
+          },
+        });
+
+        posData.push({
+          type: 'text',
+          value: `<span style="margin-left: 85px; text-transform: uppercase;">${this.props.param.celular}</span>`,
+          style: {
+            marginTop: '14px',
+            textTrasnform: 'uppercase',
+            fontSize: 12,
+            fontWeight: 600,
+            fontFamily: 'Arial',
+          },
+        });
+
+        try {
+          await PosPrinter.print(posData, posOptions);
+          Diversos.putLog(`Imprimiu cupom(s) da promoção FILIAL 17`);
+        } catch (e) {
+          Diversos.putLog(`Não imprimiu cupom(s) da promoção FILIAL 17. Motivo: ${e}`);
+        }
+
+        await new Promise((resolve) => {
+          setTimeout(() => resolve(true), 500);
+        });
+      }
+
+      const cupom30Path = path.join(process.resourcesPath, 'assets', 'cupom-sorteio-filial-30.png');
+
+      Diversos.putLog(`Caminho do cupoms filial 30: ${cupom30Path}`);
+
+      for (let i = 0; i < numCuponsFilial30; i++) {
+        posData = [];
+
+        posData.push({
+          type: 'text',
+          value: `.`,
+          style: {},
+        });
+
+        posData.push({
+          type: 'text',
+          value: `<img src="${cupom30Path}" style="width: 275px; height: 490px; margin: 0px; padding: 0px;"/>`,
+          style: {},
+        });
+
+        posData.push({
+          type: 'text',
+          value: `<span style="margin-left: 75px; text-transform: uppercase;">${String(this.props.param.nome).substring(0, 20)}</span>`,
+          style: {
+            marginTop: '-230px',
+            textTrasnform: 'uppercase',
+            fontSize: 12,
+            fontWeight: 600,
+            fontFamily: 'Arial',
+            paddingLeft: 67,
+          },
+        });
+
+        posData.push({
+          type: 'text',
+          value: `<span style="margin-left: 55px; text-transform: uppercase;">${this.props.param.cpf} (self)</span>`,
+          style: {
+            marginTop: '14px',
+            textTrasnform: 'uppercase',
+            fontSize: 12,
+            fontWeight: 600,
+            fontFamily: 'Arial',
+          },
+        });
+
+        posData.push({
+          type: 'text',
+          value: `<span style="margin-left: 85px; text-transform: uppercase;">${this.props.param.celular}</span>`,
+          style: {
+            marginTop: '14px',
+            textTrasnform: 'uppercase',
+            fontSize: 12,
+            fontWeight: 600,
+            fontFamily: 'Arial',
+          },
+        });
+
+        try {
+          await PosPrinter.print(posData, posOptions);
+          Diversos.putLog(`Imprimiu cupom(s) da promoção FILIAL 30`);
+        } catch (e) {
+          Diversos.putLog(`Não imprimiu cupom(s) da promoção FILIAL 30. Motivo: ${e}`);
         }
 
         await new Promise((resolve) => {
@@ -1590,6 +1730,74 @@ class Step5 extends React.Component<Props> {
     }
 
     if (moment().utcOffset('-03:00').format('YYYYMMDD') < '20240905' || moment().utcOffset('-03:00').format('YYYYMMDD') > '20240930') {
+      Diversos.putLog('Fora da validade da promoção');
+      return 0;
+    }
+
+    for (let i = 0; i < this.props.cart.produtos.length; i++) {
+      if (![1, 2, 3].includes(Number(this.props.cart.produtos[i].tipogru))) {
+        let precoFinal = Number(this.props.cart.produtos[i].pmc);
+
+        if (this.props.cart.produtos[i].preco && Number(this.props.cart.produtos[i].pmc) > Number(0)) {
+          precoFinal = Number(this.props.cart.produtos[i].preco);
+        }
+
+        auxTotal += Number(this.props.cart.produtos[i].qtd) * precoFinal;
+      }
+    }
+
+    const totalCupom = Math.floor(auxTotal / 50);
+
+    Diversos.putLog(`Total de cupons calculados: ${totalCupom}`);
+
+    return totalCupom;
+  }
+
+  private promocaoFilial30Check() {
+    let auxTotal = 0;
+
+    Diversos.putLog('Vai verificar promoção da filial 30');
+
+    if (Number(this.props.adminh.Parametros.CDFIL) !== Number(30)) {
+      Diversos.putLog('Cupom somente para loja 30');
+      return 0;
+    }
+
+    if (moment().utcOffset('-03:00').format('YYYYMMDD') < '20241019' || moment().utcOffset('-03:00').format('YYYYMMDD') > '20250119') {
+      Diversos.putLog('Fora da validade da promoção');
+      return 0;
+    }
+
+    for (let i = 0; i < this.props.cart.produtos.length; i++) {
+      if (![1, 2, 3].includes(Number(this.props.cart.produtos[i].tipogru))) {
+        let precoFinal = Number(this.props.cart.produtos[i].pmc);
+
+        if (this.props.cart.produtos[i].preco && Number(this.props.cart.produtos[i].pmc) > Number(0)) {
+          precoFinal = Number(this.props.cart.produtos[i].preco);
+        }
+
+        auxTotal += Number(this.props.cart.produtos[i].qtd) * precoFinal;
+      }
+    }
+
+    const totalCupom = Math.floor(auxTotal / 50);
+
+    Diversos.putLog(`Total de cupons calculados: ${totalCupom}`);
+
+    return totalCupom;
+  }
+
+  private promocaoFilial17Check() {
+    let auxTotal = 0;
+
+    Diversos.putLog('Vai verificar promoção da filial 17');
+
+    if (Number(this.props.adminh.Parametros.CDFIL) !== Number(17)) {
+      Diversos.putLog('Cupom somente para loja 17');
+      return 0;
+    }
+
+    if (moment().utcOffset('-03:00').format('YYYYMMDD') < '20241019' || moment().utcOffset('-03:00').format('YYYYMMDD') > '20250105') {
       Diversos.putLog('Fora da validade da promoção');
       return 0;
     }
