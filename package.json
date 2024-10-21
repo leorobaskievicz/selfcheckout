@@ -2,7 +2,7 @@
   "name": "selfcheckout",
   "productName": "selfcheckout",
   "artifactName": "${productName}.${ext}",
-  "version": "1.2.0",
+  "version": "1.2.4",
   "description": "Pilot Self",
   "iniName": "ADMINH.ini",
   "author": "Pilot Self",
@@ -11,7 +11,7 @@
   "scripts": {
     "build": "node pre-build.js && concurrently \"npm run build:main\" \"npm run build:renderer\"",
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts",
-    "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.prod.ts && cp src/renderer/loading.html release/app/dist/renderer/ && cp assets/loader-caixa.gif release/app/dist/renderer/ && cp assets/logo-callfarma.png release/app/dist/renderer/ && mkdir release/app/dist/renderer/assets && cp ./assets/audio/*.mp3 release/app/dist/renderer/assets/ && cp -r ./assets/cupom release/app/dist/renderer/assets ",
+    "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.prod.ts && cp src/renderer/loading.html release/app/dist/renderer/ && cp assets/loader-caixa.gif release/app/dist/renderer/ && cp assets/logo-callfarma.png release/app/dist/renderer/ && mkdir release/app/dist/renderer/assets && cp ./assets/audio/*.mp3 release/app/dist/renderer/assets/ ",
     "postinstall": "ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.ts",
     "lint": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx",
     "package": "NODE_ENV=production ts-node ./.erb/scripts/clean.js dist && NODE_ENV=production npm run build && NODE_ENV=production electron-builder build --publish never --win",
@@ -45,7 +45,7 @@
   "devDependencies": {
     "react-qr-code": "^2.0.15",
     "@electron/remote": "^2.0.10",
-    "@electron/notarize": "^1.2.3",
+    "@electron/notarize": "^1.2.4",
     "@electron/rebuild": "^3.2.13",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
@@ -145,7 +145,7 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "buildVersion": "1.2.0",
+    "buildVersion": "1.2.3",
     "npmRebuild": false,
     "productName": "selfcheckout",
     "artifactName": "${productName}.${ext}",
